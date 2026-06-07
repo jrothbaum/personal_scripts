@@ -1,0 +1,391 @@
+#!/usr/bin/env python3
+"""Generate a single-month-at-a-time HTML calendar for the 2026-2027 school year (ES/MS)."""
+
+import calendar
+import json
+from datetime import date
+
+CLOSED = "closed"
+EARLY = "early"
+FIRST_DAY = "first_day"
+STAFF_ONLY = "staff_only"
+
+EVENTS = {
+    date(2026, 8, 13): (STAFF_ONLY, "First day for staff"),
+    date(2026, 8, 24): (FIRST_DAY, "First day for K-12 students"),
+    date(2026, 8, 27): (FIRST_DAY, "First day for Pre-K/RECC students"),
+    date(2026, 9,  7): (CLOSED,    "Labor Day"),
+    date(2026, 9, 21): (CLOSED,    "Yom Kippur"),
+    date(2026, 9, 30): (EARLY,     "Early dismissal – Staff Professional Day"),
+    date(2026, 10, 16): (STAFF_ONLY, "No school for students – Staff Professional Day"),
+    date(2026, 10, 28): (STAFF_ONLY, "No school for students – Staff Professional Day"),
+    date(2026, 11,  3): (CLOSED,   "Election Day"),
+    date(2026, 11, 23): (EARLY,    "Early dismissal – ES/MS Parent/Teacher Conferences"),
+    date(2026, 11, 24): (EARLY,    "Early dismissal – ES/MS Parent/Teacher Conferences"),
+    date(2026, 11, 25): (STAFF_ONLY, "No school for students – Parent/Teacher Conferences"),
+    date(2026, 11, 26): (CLOSED,   "Thanksgiving Holiday"),
+    date(2026, 11, 27): (CLOSED,   "Thanksgiving Holiday"),
+    date(2026, 12,  9): (EARLY,    "Early dismissal – Staff Professional Day"),
+    date(2026, 12, 24): (CLOSED,   "Winter Break"),
+    date(2026, 12, 25): (CLOSED,   "Winter Break"),
+    date(2026, 12, 28): (CLOSED,   "Winter Break"),
+    date(2026, 12, 29): (CLOSED,   "Winter Break"),
+    date(2026, 12, 30): (CLOSED,   "Winter Break"),
+    date(2026, 12, 31): (CLOSED,   "Winter Break"),
+    date(2027,  1,  1): (CLOSED,   "Winter Break"),
+    date(2027,  1, 14): (EARLY,    "Early dismissal – ES P/T Conferences; MS Midterm Exams"),
+    date(2027,  1, 15): (EARLY,    "Early dismissal – ES P/T Conferences; MS Midterm Exams"),
+    date(2027,  1, 18): (CLOSED,   "Martin Luther King Jr. Day"),
+    date(2027,  1, 19): (STAFF_ONLY, "No school for students – Staff Professional Day"),
+    date(2027,  2,  3): (STAFF_ONLY, "No school for students – Staff Professional Day"),
+    date(2027,  2, 15): (CLOSED,   "Presidents Day"),
+    date(2027,  3,  9): (STAFF_ONLY, "No school for students – Eid al-Fitr; Staff Professional Day"),
+    date(2027,  3, 22): (CLOSED,   "Spring Break"),
+    date(2027,  3, 23): (CLOSED,   "Spring Break"),
+    date(2027,  3, 24): (CLOSED,   "Spring Break"),
+    date(2027,  3, 25): (CLOSED,   "Spring Break"),
+    date(2027,  3, 26): (CLOSED,   "Spring Break"),
+    date(2027,  3, 29): (CLOSED,   "Spring Break"),
+    date(2027,  4,  8): (EARLY,    "Early dismissal – Staff Professional Day"),
+    date(2027,  5, 17): (EARLY,    "Early dismissal – Staff Professional Day"),
+    date(2027,  5, 31): (CLOSED,   "Memorial Day"),
+    date(2027,  6,  2): (EARLY,    "Early dismissal – Staff Professional Day"),
+    date(2027,  6,  7): (EARLY,    "Early dismissal – Staff Professional Day"),
+    date(2027,  6,  8): (EARLY,    "Early dismissal – Last Day of School"),
+    date(2027,  6,  9): (CLOSED,   "Possible inclement weather day"),
+    date(2027,  6, 10): (CLOSED,   "Possible inclement weather day"),
+    date(2027,  6, 11): (CLOSED,   "Possible inclement weather day"),
+}
+
+MONTH_NAMES = [
+    "", "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+CSS = """
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #eef2f7;
+    color: #333;
+    padding: 2rem 1.5rem;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.2rem;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    color: #555;
+}
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* Outer wrapper — single column, centered */
+.calendar-wrapper {
+    max-width: 740px;
+    margin: 0 auto;
+}
+
+/* Navigation header */
+.nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a1a2e;
+    color: #fff;
+    border-radius: 14px 14px 0 0;
+    padding: 0.85rem 1.25rem;
+}
+.nav-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+.nav-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.28); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+/* Month card (no top radius — nav-header sits above) */
+.month-card {
+    background: #fff;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Day-of-week header row */
+.dow-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #f4f6fa;
+    border-bottom: 1px solid #e8eaf0;
+}
+.dow-cell {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 0;
+    color: #888;
+    text-transform: uppercase;
+}
+.dow-cell.weekend { color: #bbb; }
+
+/* Calendar grid */
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day-cell {
+    min-height: 90px;
+    padding: 8px 9px 6px;
+    border: 1px solid #f0f2f6;
+    position: relative;
+}
+.day-cell.empty { background: #f9fafb; }
+.day-cell.weekend { background: #f7f8fb; }
+
+.day-num {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+.event-label {
+    font-size: 0.68rem;
+    line-height: 1.35;
+    margin-top: 4px;
+    color: inherit;
+    opacity: 0.85;
+}
+
+/* Event-type colours */
+.day-cell.closed        { background: #fde8e8; }
+.day-cell.closed        .day-num { color: #b91c1c; font-weight: 700; }
+.day-cell.closed        .event-label { color: #b91c1c; }
+
+.day-cell.early         { background: #fef9c3; }
+.day-cell.early         .day-num { color: #92400e; font-weight: 700; }
+.day-cell.early         .event-label { color: #92400e; }
+
+.day-cell.first_day     { background: #dcfce7; }
+.day-cell.first_day     .day-num { color: #14532d; font-weight: 700; }
+.day-cell.first_day     .event-label { color: #14532d; }
+
+.day-cell.staff_only    { background: #fde8e8; }
+.day-cell.staff_only    .day-num { color: #b91c1c; font-weight: 700; }
+.day-cell.staff_only    .event-label { color: #b91c1c; }
+
+/* CSS tooltip */
+.day-cell[data-tip] { cursor: help; }
+.day-cell[data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    z-index: 20;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+"""
+
+SWATCH_COLORS = {
+    FIRST_DAY:  "#86efac",
+    CLOSED:     "#fca5a5",
+    EARLY:      "#fde047",
+    STAFF_ONLY: "#fca5a5",
+}
+
+LEGEND_LABELS = [
+    (FIRST_DAY,  "First Day of School"),
+    (CLOSED,     "No School for Students"),
+    (EARLY,      "Early Dismissal (3 hrs)"),
+]
+
+
+def short_label(description: str) -> str:
+    text = description
+    if "–" in text:
+        text = text.split("–", 1)[1].strip()
+    if len(text) > 26:
+        text = text[:25] + "…"
+    return text
+
+
+def build_month(year: int, month: int, index: int) -> str:
+    cal = calendar.Calendar(firstweekday=6)  # weeks start on Sunday
+    weeks = cal.monthdatescalendar(year, month)
+
+    dow_cells = "".join(
+        f'<div class="dow-cell{" weekend" if i in (0, 6) else ""}">{DAY_NAMES[i]}</div>'
+        for i in range(7)
+    )
+
+    day_cells = []
+    for week in weeks:
+        for d in week:
+            if d.month != month:
+                day_cells.append('<div class="day-cell empty"></div>')
+                continue
+
+            is_weekend = d.weekday() in (5, 6)  # Sat, Sun
+            event = EVENTS.get(d)
+
+            classes = ["day-cell"]
+            if is_weekend:
+                classes.append("weekend")
+
+            tip_attr = ""
+            label_html = ""
+            if event:
+                etype, desc = event
+                classes.append(etype)
+                tip_attr = f' data-tip="{desc}"'
+                if etype == EARLY:
+                    display = "Early Dismissal"
+                elif etype in (CLOSED, STAFF_ONLY):
+                    display = "No School: " + short_label(desc)
+                else:
+                    display = short_label(desc)
+                label_html = f'<div class="event-label">{display}</div>'
+
+            day_cells.append(
+                f'<div class="{" ".join(classes)}"{tip_attr}>'
+                f'<div class="day-num">{d.day}</div>'
+                f'{label_html}'
+                f'</div>'
+            )
+
+    grid = "\n    ".join(day_cells)
+    hidden = " hidden" if index > 0 else ""
+    return (
+        f'<div class="month-card" id="month-{index}"{hidden}>'
+        f'<div class="dow-row">{dow_cells}</div>'
+        f'<div class="cal-grid">\n    {grid}\n  </div>'
+        f'</div>'
+    )
+
+
+def main():
+    school_months = [
+        (2026, 8), (2026, 9), (2026, 10), (2026, 11), (2026, 12),
+        (2027, 1), (2027, 2), (2027, 3), (2027, 4), (2027, 5), (2027, 6),
+    ]
+
+    month_labels = [f"{MONTH_NAMES[m]} {y}" for y, m in school_months]
+    months_html = "\n".join(build_month(y, m, i) for i, (y, m) in enumerate(school_months))
+
+    legend_html = "\n    ".join(
+        f'<div class="legend-item">'
+        f'<div class="legend-swatch" style="background:{SWATCH_COLORS[t]}"></div>'
+        f'{label}</div>'
+        for t, label in LEGEND_LABELS
+    )
+
+    js = f"""
+const MONTHS = {json.dumps(month_labels)};
+let current = 0;
+
+const prevBtn = document.getElementById('btn-prev');
+const nextBtn = document.getElementById('btn-next');
+const navTitle = document.getElementById('nav-title');
+
+function showMonth(idx) {{
+    document.getElementById('month-' + current).hidden = true;
+    current = idx;
+    document.getElementById('month-' + current).hidden = false;
+    navTitle.textContent = MONTHS[current];
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === MONTHS.length - 1;
+}}
+
+prevBtn.addEventListener('click', () => showMonth(current - 1));
+nextBtn.addEventListener('click', () => showMonth(current + 1));
+prevBtn.disabled = true;
+"""
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026–2027 School Year Calendar (ES/MS)</title>
+  <style>
+{CSS}
+  </style>
+</head>
+<body>
+  <h1>2026–2027 School Year Calendar</h1>
+  <div class="legend">
+    {legend_html}
+  </div>
+  <div class="calendar-wrapper">
+    <div class="nav-header">
+      <button class="nav-btn" id="btn-prev">&#8249;</button>
+      <span id="nav-title">{month_labels[0]}</span>
+      <button class="nav-btn" id="btn-next">&#8250;</button>
+    </div>
+    {months_html}
+  </div>
+  <script>{js}</script>
+</body>
+</html>
+"""
+
+    out = "hcps_calendar_2026_2027.html"
+    with open(out, "w") as f:
+        f.write(html)
+    print(f"Written to {out}")
+
+
+if __name__ == "__main__":
+    main()
