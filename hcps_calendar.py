@@ -416,20 +416,31 @@ h1 {
 .day-cell.weekend { background: #f7f8fb; }
 
 .color-bar {
+    position: relative;
     margin: -8px -9px 5px;
-    padding: 2px 0;
+    padding: 0 6px;
+    height: 18px;
+    color: #000;
+}
+.bar-label {
+    display: block;
+    height: 18px;
+    line-height: 18px;
     text-align: center;
     font-size: 0.6rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-    color: #000;
+}
+.bar-daynum {
+    position: absolute;
+    right: 6px;
+    top: 0;
+    height: 18px;
+    line-height: 18px;
+    font-size: 0.68rem;
+    font-weight: 700;
 }
 
-.day-num {
-    font-size: 1.05rem;
-    font-weight: 500;
-    line-height: 1.3;
-}
 .event-label {
     font-size: 0.68rem;
     line-height: 1.35;
@@ -437,15 +448,6 @@ h1 {
     color: inherit;
     opacity: 0.85;
 }
-
-/* Event-type colours */
-.day-cell.closed        .day-num { font-weight: 700; }
-
-.day-cell.early         .day-num { font-weight: 700; }
-
-.day-cell.first_day     .day-num { font-weight: 700; }
-
-.day-cell.staff_only    .day-num { font-weight: 700; }
 
 /* CSS tooltip */
 .day-cell[data-tip] { cursor: help; }
@@ -467,8 +469,15 @@ h1 {
 }
 
 /* Print — one month filling a full landscape page */
+/*
+   Print sizing uses fixed physical units (in), not vh/flex-fill — vh resolves
+   inconsistently across browsers' print engines and can silently overflow to
+   a second page. These numbers are budgeted to fit inside the smallest common
+   landscape page (A4: 8.27in tall, 0.3in margins => 7.67in usable) with room
+   to spare, rather than exactly filling whatever page the browser reports.
+*/
 @media print {
-    @page { size: landscape; margin: 0.35in; }
+    @page { size: landscape; margin: 0.3in; }
 
     * {
         -webkit-print-color-adjust: exact !important;
@@ -476,39 +485,21 @@ h1 {
         color-adjust: exact !important;
     }
 
-    body {
-        background: #fff;
-        padding: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
+    body { background: #fff; padding: 0; }
     .extra-info { display: none; }
     .toolbar { display: none; }
     .nav-btn { display: none; }
-    .nav-header { justify-content: center; }
+    .nav-header { justify-content: center; padding: 0.12in 0.2in; }
 
     .dow-cell.weekend, .day-cell.weekend { display: none; }
     .dow-row, .cal-grid { grid-template-columns: repeat(5, 1fr); }
 
-    .calendar-wrapper {
-        max-width: none;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-    }
-    .month-card:not([hidden]) {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-    }
-    .cal-grid {
-        flex: 1;
-        grid-auto-rows: 1fr;
-    }
-    .day-cell { min-height: 0; }
+    .calendar-wrapper { max-width: none; }
+    .month-card { page-break-inside: avoid; break-inside: avoid; }
+
+    .cal-grid { grid-auto-rows: 1in; }
+    .day-cell { min-height: 0; height: 1in; overflow: hidden; }
+    .event-label { font-size: 0.62rem; line-height: 1.25; }
 }
 """
 
@@ -573,18 +564,18 @@ def build_month(year: int, month: int, index: int) -> str:
                     display = short_label(desc)
                 label_html = f'<div class="event-label">{display}</div>'
 
-            bar_html = ""
             color_name = COLOR_DAYS.get(d)
-            if color_name:
-                bar_html = (
-                    f'<div class="color-bar" style="background:{RA_COLORS[color_name]}">'
-                    f'{color_name}</div>'
-                )
+            bg_style = f' style="background:{RA_COLORS[color_name]}"' if color_name else ""
+            bar_html = (
+                f'<div class="color-bar"{bg_style}>'
+                f'<span class="bar-label">{color_name or ""}</span>'
+                f'<span class="bar-daynum">{d.day}</span>'
+                f'</div>'
+            )
 
             day_cells.append(
                 f'<div class="{" ".join(classes)}"{tip_attr}>'
                 f'{bar_html}'
-                f'<div class="day-num">{d.day}</div>'
                 f'{label_html}'
                 f'</div>'
             )
