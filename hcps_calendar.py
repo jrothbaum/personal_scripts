@@ -381,6 +381,7 @@ h1 {
     border-radius: 0 0 14px 14px;
     overflow: hidden;
 }
+.month-print-title { display: none; }
 
 /* Day-of-week header row */
 .dow-row {
@@ -500,6 +501,21 @@ h1 {
     .cal-grid { grid-auto-rows: 1in; }
     .day-cell { min-height: 0; height: 1in; overflow: hidden; }
     .event-label { font-size: 0.62rem; line-height: 1.25; }
+
+    /* Print-all-months mode: one month per page, each with its own heading */
+    body.print-all .nav-header { display: none; }
+    body.print-all .month-print-title {
+        display: block;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.08in;
+    }
+    body.print-all .month-card:not(:last-child) {
+        page-break-after: always;
+        break-after: page;
+    }
 }
 """
 
@@ -582,8 +598,10 @@ def build_month(year: int, month: int, index: int) -> str:
 
     grid = "\n    ".join(day_cells)
     hidden = " hidden" if index > 0 else ""
+    month_label = f"{MONTH_NAMES[month]} {year}"
     return (
         f'<div class="month-card" id="month-{index}"{hidden}>'
+        f'<div class="month-print-title">{month_label}</div>'
         f'<div class="dow-row">{dow_cells}</div>'
         f'<div class="cal-grid">\n    {grid}\n  </div>'
         f'</div>'
@@ -641,6 +659,27 @@ extraToggle.addEventListener('click', () => {{
     const nowHidden = extraInfo.classList.toggle('hidden');
     extraToggle.textContent = nowHidden ? 'Show extra' : 'Hide extra';
 }});
+
+const printAllBtn = document.getElementById('print-all-btn');
+
+function showOnlyCurrent() {{
+    for (let i = 0; i < MONTHS.length; i++) {{
+        document.getElementById('month-' + i).hidden = (i !== current);
+    }}
+}}
+
+printAllBtn.addEventListener('click', () => {{
+    for (let i = 0; i < MONTHS.length; i++) {{
+        document.getElementById('month-' + i).hidden = false;
+    }}
+    document.body.classList.add('print-all');
+    window.print();
+}});
+
+window.addEventListener('afterprint', () => {{
+    document.body.classList.remove('print-all');
+    showOnlyCurrent();
+}});
 """
 
     html = f"""<!DOCTYPE html>
@@ -656,6 +695,7 @@ extraToggle.addEventListener('click', () => {{
 <body>
   <div class="toolbar">
     <button class="toggle-btn" id="extra-toggle">Hide extra</button>
+    <button class="toggle-btn" id="print-all-btn">Print all months</button>
   </div>
   <div class="extra-info" id="extra-info">
     <h1>2026–2027 School Year Calendar</h1>
