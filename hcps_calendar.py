@@ -38,6 +38,8 @@ EVENTS = {
     date(2027,  1, 18): (CLOSED,   "Martin Luther King Jr. Day"),
     date(2027,  1, 19): (STAFF_ONLY, "No school for students – Staff Professional Day"),
     date(2027,  2,  3): (STAFF_ONLY, "No school for students – Staff Professional Day"),
+    date(2027,  2, 11): (EARLY,    "Early dismissal – ES Parent/Teacher Conferences"),
+    date(2027,  2, 12): (EARLY,    "Early dismissal – ES Parent/Teacher Conferences"),
     date(2027,  2, 15): (CLOSED,   "Presidents Day"),
     date(2027,  3,  9): (STAFF_ONLY, "No school for students – Eid al-Fitr; Staff Professional Day"),
     date(2027,  3, 22): (CLOSED,   "Spring Break"),
@@ -55,6 +57,202 @@ EVENTS = {
     date(2027,  6,  9): (CLOSED,   "Possible inclement weather day"),
     date(2027,  6, 10): (CLOSED,   "Possible inclement weather day"),
     date(2027,  6, 11): (CLOSED,   "Possible inclement weather day"),
+}
+
+RA_COLORS = {
+    "RED":    "#fca5a5",
+    "ORANGE": "#fdba74",
+    "YELLOW": "#fde047",
+    "GREEN":  "#86efac",
+    "BLUE":   "#93c5fd",
+}
+
+COLOR_DAYS = {
+    date(2026,  8, 24): "RED",
+    date(2026,  8, 25): "ORANGE",
+    date(2026,  8, 26): "YELLOW",
+    date(2026,  8, 27): "GREEN",
+    date(2026,  8, 28): "BLUE",
+    date(2026,  8, 31): "RED",
+    date(2026,  9,  1): "ORANGE",
+    date(2026,  9,  2): "YELLOW",
+    date(2026,  9,  3): "GREEN",
+    date(2026,  9,  4): "BLUE",
+    date(2026,  9,  8): "RED",
+    date(2026,  9,  9): "ORANGE",
+    date(2026,  9, 10): "YELLOW",
+    date(2026,  9, 11): "GREEN",
+    date(2026,  9, 14): "BLUE",
+    date(2026,  9, 15): "RED",
+    date(2026,  9, 16): "ORANGE",
+    date(2026,  9, 17): "YELLOW",
+    date(2026,  9, 18): "GREEN",
+    date(2026,  9, 22): "BLUE",
+    date(2026,  9, 23): "RED",
+    date(2026,  9, 24): "ORANGE",
+    date(2026,  9, 25): "YELLOW",
+    date(2026,  9, 28): "GREEN",
+    date(2026,  9, 29): "BLUE",
+    date(2026,  9, 30): "RED",
+    date(2026, 10,  1): "ORANGE",
+    date(2026, 10,  2): "YELLOW",
+    date(2026, 10,  5): "GREEN",
+    date(2026, 10,  6): "BLUE",
+    date(2026, 10,  7): "RED",
+    date(2026, 10,  8): "ORANGE",
+    date(2026, 10,  9): "YELLOW",
+    date(2026, 10, 12): "GREEN",
+    date(2026, 10, 13): "BLUE",
+    date(2026, 10, 14): "RED",
+    date(2026, 10, 15): "ORANGE",
+    date(2026, 10, 19): "YELLOW",
+    date(2026, 10, 20): "GREEN",
+    date(2026, 10, 21): "BLUE",
+    date(2026, 10, 22): "RED",
+    date(2026, 10, 23): "ORANGE",
+    date(2026, 10, 26): "YELLOW",
+    date(2026, 10, 27): "GREEN",
+    date(2026, 10, 29): "BLUE",
+    date(2026, 10, 30): "RED",
+    date(2026, 11,  2): "ORANGE",
+    date(2026, 11,  4): "YELLOW",
+    date(2026, 11,  5): "GREEN",
+    date(2026, 11,  6): "BLUE",
+    date(2026, 11,  9): "RED",
+    date(2026, 11, 10): "ORANGE",
+    date(2026, 11, 11): "YELLOW",
+    date(2026, 11, 12): "GREEN",
+    date(2026, 11, 13): "BLUE",
+    date(2026, 11, 16): "RED",
+    date(2026, 11, 17): "ORANGE",
+    date(2026, 11, 18): "YELLOW",
+    date(2026, 11, 19): "GREEN",
+    date(2026, 11, 20): "BLUE",
+    date(2026, 11, 23): "RED",
+    date(2026, 11, 24): "ORANGE",
+    date(2026, 11, 30): "YELLOW",
+    date(2026, 12,  1): "GREEN",
+    date(2026, 12,  2): "BLUE",
+    date(2026, 12,  3): "RED",
+    date(2026, 12,  4): "ORANGE",
+    date(2026, 12,  7): "YELLOW",
+    date(2026, 12,  8): "GREEN",
+    date(2026, 12,  9): "BLUE",
+    date(2026, 12, 10): "RED",
+    date(2026, 12, 11): "ORANGE",
+    date(2026, 12, 14): "YELLOW",
+    date(2026, 12, 15): "GREEN",
+    date(2026, 12, 16): "BLUE",
+    date(2026, 12, 17): "RED",
+    date(2026, 12, 18): "ORANGE",
+    date(2026, 12, 21): "YELLOW",
+    date(2026, 12, 22): "GREEN",
+    date(2026, 12, 23): "BLUE",
+    date(2027,  1,  4): "RED",
+    date(2027,  1,  5): "ORANGE",
+    date(2027,  1,  6): "YELLOW",
+    date(2027,  1,  7): "GREEN",
+    date(2027,  1,  8): "BLUE",
+    date(2027,  1, 11): "RED",
+    date(2027,  1, 12): "ORANGE",
+    date(2027,  1, 13): "YELLOW",
+    date(2027,  1, 14): "GREEN",
+    date(2027,  1, 15): "BLUE",
+    date(2027,  1, 20): "RED",
+    date(2027,  1, 21): "ORANGE",
+    date(2027,  1, 22): "YELLOW",
+    date(2027,  1, 25): "GREEN",
+    date(2027,  1, 26): "BLUE",
+    date(2027,  1, 27): "RED",
+    date(2027,  1, 28): "ORANGE",
+    date(2027,  1, 29): "YELLOW",
+    date(2027,  2,  1): "GREEN",
+    date(2027,  2,  2): "BLUE",
+    date(2027,  2,  4): "RED",
+    date(2027,  2,  5): "ORANGE",
+    date(2027,  2,  8): "YELLOW",
+    date(2027,  2,  9): "GREEN",
+    date(2027,  2, 10): "BLUE",
+    date(2027,  2, 11): "RED",
+    date(2027,  2, 12): "ORANGE",
+    date(2027,  2, 16): "YELLOW",
+    date(2027,  2, 17): "GREEN",
+    date(2027,  2, 18): "BLUE",
+    date(2027,  2, 19): "RED",
+    date(2027,  2, 22): "ORANGE",
+    date(2027,  2, 23): "YELLOW",
+    date(2027,  2, 24): "GREEN",
+    date(2027,  2, 25): "BLUE",
+    date(2027,  2, 26): "RED",
+    date(2027,  3,  1): "ORANGE",
+    date(2027,  3,  2): "YELLOW",
+    date(2027,  3,  3): "GREEN",
+    date(2027,  3,  4): "BLUE",
+    date(2027,  3,  5): "RED",
+    date(2027,  3,  8): "ORANGE",
+    date(2027,  3, 10): "YELLOW",
+    date(2027,  3, 11): "GREEN",
+    date(2027,  3, 12): "BLUE",
+    date(2027,  3, 15): "RED",
+    date(2027,  3, 16): "ORANGE",
+    date(2027,  3, 17): "YELLOW",
+    date(2027,  3, 18): "GREEN",
+    date(2027,  3, 19): "BLUE",
+    date(2027,  3, 30): "RED",
+    date(2027,  3, 31): "ORANGE",
+    date(2027,  4,  1): "YELLOW",
+    date(2027,  4,  2): "GREEN",
+    date(2027,  4,  5): "BLUE",
+    date(2027,  4,  6): "RED",
+    date(2027,  4,  7): "ORANGE",
+    date(2027,  4,  8): "YELLOW",
+    date(2027,  4,  9): "GREEN",
+    date(2027,  4, 12): "BLUE",
+    date(2027,  4, 13): "RED",
+    date(2027,  4, 14): "ORANGE",
+    date(2027,  4, 15): "YELLOW",
+    date(2027,  4, 16): "GREEN",
+    date(2027,  4, 19): "BLUE",
+    date(2027,  4, 20): "RED",
+    date(2027,  4, 21): "ORANGE",
+    date(2027,  4, 22): "YELLOW",
+    date(2027,  4, 23): "GREEN",
+    date(2027,  4, 26): "BLUE",
+    date(2027,  4, 27): "RED",
+    date(2027,  4, 28): "ORANGE",
+    date(2027,  4, 29): "YELLOW",
+    date(2027,  4, 30): "GREEN",
+    date(2027,  5,  3): "BLUE",
+    date(2027,  5,  4): "RED",
+    date(2027,  5,  5): "ORANGE",
+    date(2027,  5,  6): "YELLOW",
+    date(2027,  5,  7): "GREEN",
+    date(2027,  5, 10): "BLUE",
+    date(2027,  5, 11): "RED",
+    date(2027,  5, 12): "ORANGE",
+    date(2027,  5, 13): "YELLOW",
+    date(2027,  5, 14): "GREEN",
+    date(2027,  5, 17): "BLUE",
+    date(2027,  5, 18): "RED",
+    date(2027,  5, 19): "ORANGE",
+    date(2027,  5, 20): "YELLOW",
+    date(2027,  5, 21): "GREEN",
+    date(2027,  5, 24): "BLUE",
+    date(2027,  5, 25): "RED",
+    date(2027,  5, 26): "ORANGE",
+    date(2027,  5, 27): "YELLOW",
+    date(2027,  5, 28): "GREEN",
+    date(2027,  6,  1): "BLUE",
+    date(2027,  6,  2): "RED",
+    date(2027,  6,  3): "ORANGE",
+    date(2027,  6,  4): "YELLOW",
+    date(2027,  6,  7): "GREEN",
+    date(2027,  6,  8): "BLUE",
+    date(2027,  6,  9): "RED",
+    date(2027,  6, 10): "ORANGE",
+    date(2027,  6, 11): "YELLOW",
+    date(2027,  6, 14): "GREEN",
+    date(2027,  6, 15): "BLUE",
 }
 
 MONTH_NAMES = [
@@ -84,6 +282,23 @@ h1 {
     letter-spacing: -0.01em;
 }
 
+.toolbar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+.toggle-btn {
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #555;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+}
+.toggle-btn:hover { background: #f4f6fa; }
+
 /* Legend */
 .legend {
     display: flex;
@@ -105,6 +320,16 @@ h1 {
     border-radius: 4px;
     flex-shrink: 0;
 }
+.legend-group-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    align-self: center;
+    margin-right: -0.4rem;
+}
+.extra-info.hidden { display: none; }
 
 /* Outer wrapper — single column, centered */
 .calendar-wrapper {
@@ -117,8 +342,10 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #1a1a2e;
-    color: #fff;
+    background: #fff;
+    color: #1a1a2e;
+    border: 1px solid #e0e3eb;
+    border-bottom: none;
     border-radius: 14px 14px 0 0;
     padding: 0.85rem 1.25rem;
 }
@@ -128,9 +355,9 @@ h1 {
     letter-spacing: 0.03em;
 }
 .nav-btn {
-    background: rgba(255,255,255,0.15);
-    border: none;
-    color: #fff;
+    background: none;
+    border: 1px solid #ccc;
+    color: #1a1a2e;
     font-size: 1.35rem;
     font-weight: bold;
     cursor: pointer;
@@ -144,14 +371,14 @@ h1 {
     line-height: 1;
     flex-shrink: 0;
 }
-.nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.28); }
+.nav-btn:hover:not(:disabled) { background: #f0f2f6; }
 .nav-btn:disabled { opacity: 0.25; cursor: default; }
 
-/* Month card (no top radius — nav-header sits above) */
+/* Month card */
 .month-card {
     background: #fff;
+    border: 1px solid #e0e3eb;
     border-radius: 0 0 14px 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     overflow: hidden;
 }
 
@@ -188,6 +415,16 @@ h1 {
 .day-cell.empty { background: #f9fafb; }
 .day-cell.weekend { background: #f7f8fb; }
 
+.color-bar {
+    margin: -8px -9px 5px;
+    padding: 2px 0;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #000;
+}
+
 .day-num {
     font-size: 1.05rem;
     font-weight: 500;
@@ -202,21 +439,13 @@ h1 {
 }
 
 /* Event-type colours */
-.day-cell.closed        { background: #fde8e8; }
-.day-cell.closed        .day-num { color: #b91c1c; font-weight: 700; }
-.day-cell.closed        .event-label { color: #b91c1c; }
+.day-cell.closed        .day-num { font-weight: 700; }
 
-.day-cell.early         { background: #fef9c3; }
-.day-cell.early         .day-num { color: #92400e; font-weight: 700; }
-.day-cell.early         .event-label { color: #92400e; }
+.day-cell.early         .day-num { font-weight: 700; }
 
-.day-cell.first_day     { background: #dcfce7; }
-.day-cell.first_day     .day-num { color: #14532d; font-weight: 700; }
-.day-cell.first_day     .event-label { color: #14532d; }
+.day-cell.first_day     .day-num { font-weight: 700; }
 
-.day-cell.staff_only    { background: #fde8e8; }
-.day-cell.staff_only    .day-num { color: #b91c1c; font-weight: 700; }
-.day-cell.staff_only    .event-label { color: #b91c1c; }
+.day-cell.staff_only    .day-num { font-weight: 700; }
 
 /* CSS tooltip */
 .day-cell[data-tip] { cursor: help; }
@@ -235,6 +464,51 @@ h1 {
     z-index: 20;
     pointer-events: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Print — one month filling a full landscape page */
+@media print {
+    @page { size: landscape; margin: 0.35in; }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    body {
+        background: #fff;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .extra-info { display: none; }
+    .toolbar { display: none; }
+    .nav-btn { display: none; }
+    .nav-header { justify-content: center; }
+
+    .dow-cell.weekend, .day-cell.weekend { display: none; }
+    .dow-row, .cal-grid { grid-template-columns: repeat(5, 1fr); }
+
+    .calendar-wrapper {
+        max-width: none;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+    .month-card:not([hidden]) {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+    .cal-grid {
+        flex: 1;
+        grid-auto-rows: 1fr;
+    }
+    .day-cell { min-height: 0; }
 }
 """
 
@@ -274,7 +548,8 @@ def build_month(year: int, month: int, index: int) -> str:
     for week in weeks:
         for d in week:
             if d.month != month:
-                day_cells.append('<div class="day-cell empty"></div>')
+                empty_weekend = " weekend" if d.weekday() in (5, 6) else ""
+                day_cells.append(f'<div class="day-cell empty{empty_weekend}"></div>')
                 continue
 
             is_weekend = d.weekday() in (5, 6)  # Sat, Sun
@@ -298,8 +573,17 @@ def build_month(year: int, month: int, index: int) -> str:
                     display = short_label(desc)
                 label_html = f'<div class="event-label">{display}</div>'
 
+            bar_html = ""
+            color_name = COLOR_DAYS.get(d)
+            if color_name:
+                bar_html = (
+                    f'<div class="color-bar" style="background:{RA_COLORS[color_name]}">'
+                    f'{color_name}</div>'
+                )
+
             day_cells.append(
                 f'<div class="{" ".join(classes)}"{tip_attr}>'
+                f'{bar_html}'
                 f'<div class="day-num">{d.day}</div>'
                 f'{label_html}'
                 f'</div>'
@@ -324,12 +608,20 @@ def main():
     month_labels = [f"{MONTH_NAMES[m]} {y}" for y, m in school_months]
     months_html = "\n".join(build_month(y, m, i) for i, (y, m) in enumerate(school_months))
 
-    legend_html = "\n    ".join(
+    legend_items = [
         f'<div class="legend-item">'
         f'<div class="legend-swatch" style="background:{SWATCH_COLORS[t]}"></div>'
         f'{label}</div>'
         for t, label in LEGEND_LABELS
+    ]
+    legend_items.append('<div class="legend-group-label">RA Color Day</div>')
+    legend_items.extend(
+        f'<div class="legend-item">'
+        f'<div class="legend-swatch" style="background:{hexval}"></div>'
+        f'{name.title()}</div>'
+        for name, hexval in RA_COLORS.items()
     )
+    legend_html = "\n    ".join(legend_items)
 
     js = f"""
 const MONTHS = {json.dumps(month_labels)};
@@ -351,6 +643,13 @@ function showMonth(idx) {{
 prevBtn.addEventListener('click', () => showMonth(current - 1));
 nextBtn.addEventListener('click', () => showMonth(current + 1));
 prevBtn.disabled = true;
+
+const extraInfo = document.getElementById('extra-info');
+const extraToggle = document.getElementById('extra-toggle');
+extraToggle.addEventListener('click', () => {{
+    const nowHidden = extraInfo.classList.toggle('hidden');
+    extraToggle.textContent = nowHidden ? 'Show extra' : 'Hide extra';
+}});
 """
 
     html = f"""<!DOCTYPE html>
@@ -364,9 +663,14 @@ prevBtn.disabled = true;
   </style>
 </head>
 <body>
-  <h1>2026–2027 School Year Calendar</h1>
-  <div class="legend">
-    {legend_html}
+  <div class="toolbar">
+    <button class="toggle-btn" id="extra-toggle">Hide extra</button>
+  </div>
+  <div class="extra-info" id="extra-info">
+    <h1>2026–2027 School Year Calendar</h1>
+    <div class="legend">
+      {legend_html}
+    </div>
   </div>
   <div class="calendar-wrapper">
     <div class="nav-header">
