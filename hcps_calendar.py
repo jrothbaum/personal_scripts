@@ -526,10 +526,15 @@ h1 {
         color: #1a1a2e;
         margin-bottom: 0.08in;
     }
-    body.print-all .month-card:not(:last-child) {
-        page-break-after: always;
-        break-after: page;
-    }
+    /*
+       No forced break-after here: each month-card is already sized close to
+       one full page (see GRID_PRINT_BUDGET_IN), so page-break-inside: avoid
+       above is normally enough to land near one-month-per-page on browsers
+       with working print pagination. Forcing a break after every card was
+       suspected of confusing iOS Safari's print height calculation badly
+       enough to truncate the whole job to a single page — letting content
+       flow naturally is the safer, simpler behavior across devices.
+    */
 }
 """
 
@@ -675,7 +680,7 @@ let showingAll = false;
 function exitShowAll() {{
     showingAll = false;
     document.body.classList.remove('print-all');
-    printAllBtn.textContent = 'Prepare to print all months';
+    printAllBtn.textContent = 'Show all months';
 }}
 
 function showMonth(idx) {{
@@ -735,7 +740,7 @@ printAllBtn.addEventListener('click', () => {{
 <body>
   <div class="toolbar">
     <button class="toggle-btn" id="extra-toggle">Hide extra</button>
-    <button class="toggle-btn" id="print-all-btn">Prepare to print all months</button>
+    <button class="toggle-btn" id="print-all-btn">Show all months</button>
   </div>
   <div class="extra-info" id="extra-info">
     <h1>2026–2027 School Year Calendar</h1>
