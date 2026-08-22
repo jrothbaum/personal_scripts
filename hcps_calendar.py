@@ -720,15 +720,6 @@ printAllBtn.addEventListener('click', () => {{
         }}
     }}
 }});
-
-window.addEventListener('afterprint', () => {{
-    if (showingAll) {{
-        exitShowAll();
-        for (let i = 0; i < MONTHS.length; i++) {{
-            document.getElementById('month-' + i).hidden = (i !== current);
-        }}
-    }}
-}});
 """
 
     html = f"""<!DOCTYPE html>
