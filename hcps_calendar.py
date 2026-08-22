@@ -59,6 +59,11 @@ EVENTS = {
     date(2027,  6, 11): (CLOSED,   "Possible inclement weather day"),
 }
 
+# Conservative budget (in) for the week-row grid on a printed landscape page,
+# after the nav-header/title + day-of-week row. See build_month() and the
+# @media print block for how it's used.
+GRID_PRINT_BUDGET_IN = 6.4
+
 RA_COLORS = {
     "RED":    "#fca5a5",
     "ORANGE": "#fdba74",
@@ -498,8 +503,17 @@ h1 {
     .calendar-wrapper { max-width: none; }
     .month-card { page-break-inside: avoid; break-inside: avoid; }
 
-    .cal-grid { grid-auto-rows: 1in; }
-    .day-cell { min-height: 0; height: 1in; overflow: hidden; }
+    /*
+       Row height is a literal value baked in per month at generation time
+       (see --row-h on .cal-grid), not a flexible unit (fr / flex:1). CSS
+       Grid's fr-track sizing during print pagination has shown real
+       differences between Chrome's own print-preview/print pipeline and
+       its --print-to-pdf CLI path, and reportedly across browsers too — a
+       plain absolute length sidesteps that entirely and is deterministic
+       everywhere.
+    */
+    .cal-grid { grid-auto-rows: var(--row-h); }
+    .day-cell { min-height: 0; overflow: hidden; }
     .event-label { font-size: 0.62rem; line-height: 1.25; }
 
     /* Print-all-months mode: one month per page, each with its own heading */
@@ -552,14 +566,25 @@ def build_month(year: int, month: int, index: int) -> str:
     )
 
     day_cells = []
+    effective_weeks = 0
     for week in weeks:
+        # A week with no in-month weekday collapses to nothing once weekends
+        # are hidden for print — its whole row must vanish, not just its
+        # Sat/Sun cell, or it leaves a blank row and throws off row heights.
+        week_has_weekday = any(
+            d.month == month and d.weekday() not in (5, 6) for d in week
+        )
+        if week_has_weekday:
+            effective_weeks += 1
+
         for d in week:
             if d.month != month:
-                empty_weekend = " weekend" if d.weekday() in (5, 6) else ""
+                hide_weekend = not week_has_weekday or d.weekday() in (5, 6)
+                empty_weekend = " weekend" if hide_weekend else ""
                 day_cells.append(f'<div class="day-cell empty{empty_weekend}"></div>')
                 continue
 
-            is_weekend = d.weekday() in (5, 6)  # Sat, Sun
+            is_weekend = not week_has_weekday or d.weekday() in (5, 6)  # Sat, Sun
             event = EVENTS.get(d)
 
             classes = ["day-cell"]
@@ -599,11 +624,15 @@ def build_month(year: int, month: int, index: int) -> str:
     grid = "\n    ".join(day_cells)
     hidden = " hidden" if index > 0 else ""
     month_label = f"{MONTH_NAMES[month]} {year}"
+    # Conservative print budget (in) for the week-row grid alone, after the
+    # nav-header/title + day-of-week row — see the @media print note. Divided
+    # by the actual week count so 5- and 6-week months both fill it exactly.
+    row_h_in = GRID_PRINT_BUDGET_IN / effective_weeks
     return (
         f'<div class="month-card" id="month-{index}"{hidden}>'
         f'<div class="month-print-title">{month_label}</div>'
         f'<div class="dow-row">{dow_cells}</div>'
-        f'<div class="cal-grid">\n    {grid}\n  </div>'
+        f'<div class="cal-grid" style="--row-h:{row_h_in:.3f}in">\n    {grid}\n  </div>'
         f'</div>'
     )
 

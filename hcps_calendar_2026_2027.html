@@ -241,8 +241,17 @@ h1 {
     .calendar-wrapper { max-width: none; }
     .month-card { page-break-inside: avoid; break-inside: avoid; }
 
-    .cal-grid { grid-auto-rows: 1in; }
-    .day-cell { min-height: 0; height: 1in; overflow: hidden; }
+    /*
+       Row height is a literal value baked in per month at generation time
+       (see --row-h on .cal-grid), not a flexible unit (fr / flex:1). CSS
+       Grid's fr-track sizing during print pagination has shown real
+       differences between Chrome's own print-preview/print pipeline and
+       its --print-to-pdf CLI path, and reportedly across browsers too — a
+       plain absolute length sidesteps that entirely and is deterministic
+       everywhere.
+    */
+    .cal-grid { grid-auto-rows: var(--row-h); }
+    .day-cell { min-height: 0; overflow: hidden; }
     .event-label { font-size: 0.62rem; line-height: 1.25; }
 
     /* Print-all-months mode: one month per page, each with its own heading */
@@ -288,13 +297,13 @@ h1 {
       <span id="nav-title">August 2026</span>
       <button class="nav-btn" id="btn-next">&#8250;</button>
     </div>
-    <div class="month-card" id="month-0"><div class="month-print-title">August 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+    <div class="month-card" id="month-0"><div class="month-print-title">August 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">1</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">2</span></div></div>
     <div class="day-cell"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">3</span></div></div>
@@ -332,7 +341,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-1" hidden><div class="month-print-title">September 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-1" hidden><div class="month-print-title">September 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell"><div class="color-bar" style="background:#fdba74"><span class="bar-label">ORANGE</span><span class="bar-daynum">1</span></div></div>
@@ -369,7 +378,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-2" hidden><div class="month-print-title">October 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-2" hidden><div class="month-print-title">October 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell empty"></div>
@@ -406,7 +415,7 @@ h1 {
     <div class="day-cell"><div class="color-bar" style="background:#fca5a5"><span class="bar-label">RED</span><span class="bar-daynum">30</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">31</span></div></div>
   </div></div>
-<div class="month-card" id="month-3" hidden><div class="month-print-title">November 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-3" hidden><div class="month-print-title">November 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">1</span></div></div>
     <div class="day-cell"><div class="color-bar" style="background:#fdba74"><span class="bar-label">ORANGE</span><span class="bar-daynum">2</span></div></div>
     <div class="day-cell closed" data-tip="Election Day"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">3</span></div><div class="event-label">No School: Election Day</div></div>
@@ -443,7 +452,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-4" hidden><div class="month-print-title">December 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-4" hidden><div class="month-print-title">December 2026</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell"><div class="color-bar" style="background:#86efac"><span class="bar-label">GREEN</span><span class="bar-daynum">1</span></div></div>
@@ -480,7 +489,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-5" hidden><div class="month-print-title">January 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-5" hidden><div class="month-print-title">January 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell empty"></div>
@@ -517,14 +526,14 @@ h1 {
     <div class="day-cell"><div class="color-bar" style="background:#fde047"><span class="bar-label">YELLOW</span><span class="bar-daynum">29</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">30</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">31</span></div></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-6" hidden><div class="month-print-title">February 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-6" hidden><div class="month-print-title">February 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.600in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell"><div class="color-bar" style="background:#86efac"><span class="bar-label">GREEN</span><span class="bar-daynum">1</span></div></div>
     <div class="day-cell"><div class="color-bar" style="background:#93c5fd"><span class="bar-label">BLUE</span><span class="bar-daynum">2</span></div></div>
@@ -554,14 +563,14 @@ h1 {
     <div class="day-cell"><div class="color-bar" style="background:#fca5a5"><span class="bar-label">RED</span><span class="bar-daynum">26</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">27</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">28</span></div></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-7" hidden><div class="month-print-title">March 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-7" hidden><div class="month-print-title">March 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell"><div class="color-bar" style="background:#fdba74"><span class="bar-label">ORANGE</span><span class="bar-daynum">1</span></div></div>
     <div class="day-cell"><div class="color-bar" style="background:#fde047"><span class="bar-label">YELLOW</span><span class="bar-daynum">2</span></div></div>
@@ -598,7 +607,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-8" hidden><div class="month-print-title">April 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-8" hidden><div class="month-print-title">April 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell empty"></div>
@@ -635,13 +644,13 @@ h1 {
     <div class="day-cell"><div class="color-bar" style="background:#86efac"><span class="bar-label">GREEN</span><span class="bar-daynum">30</span></div></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-9" hidden><div class="month-print-title">May 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-9" hidden><div class="month-print-title">May 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
-    <div class="day-cell empty"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
+    <div class="day-cell empty weekend"></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">1</span></div></div>
     <div class="day-cell weekend"><div class="color-bar"><span class="bar-label"></span><span class="bar-daynum">2</span></div></div>
     <div class="day-cell"><div class="color-bar" style="background:#93c5fd"><span class="bar-label">BLUE</span><span class="bar-daynum">3</span></div></div>
@@ -679,7 +688,7 @@ h1 {
     <div class="day-cell empty"></div>
     <div class="day-cell empty weekend"></div>
   </div></div>
-<div class="month-card" id="month-10" hidden><div class="month-print-title">June 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid">
+<div class="month-card" id="month-10" hidden><div class="month-print-title">June 2027</div><div class="dow-row"><div class="dow-cell weekend">Sun</div><div class="dow-cell">Mon</div><div class="dow-cell">Tue</div><div class="dow-cell">Wed</div><div class="dow-cell">Thu</div><div class="dow-cell">Fri</div><div class="dow-cell weekend">Sat</div></div><div class="cal-grid" style="--row-h:1.280in">
     <div class="day-cell empty weekend"></div>
     <div class="day-cell empty"></div>
     <div class="day-cell"><div class="color-bar" style="background:#93c5fd"><span class="bar-label">BLUE</span><span class="bar-daynum">1</span></div></div>
