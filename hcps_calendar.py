@@ -669,8 +669,24 @@ const prevBtn = document.getElementById('btn-prev');
 const nextBtn = document.getElementById('btn-next');
 const navTitle = document.getElementById('nav-title');
 
+const printAllBtn = document.getElementById('print-all-btn');
+let showingAll = false;
+
+function exitShowAll() {{
+    showingAll = false;
+    document.body.classList.remove('print-all');
+    printAllBtn.textContent = 'Show all months for printing';
+}}
+
 function showMonth(idx) {{
-    document.getElementById('month-' + current).hidden = true;
+    if (showingAll) {{
+        exitShowAll();
+        for (let i = 0; i < MONTHS.length; i++) {{
+            document.getElementById('month-' + i).hidden = true;
+        }}
+    }} else {{
+        document.getElementById('month-' + current).hidden = true;
+    }}
     current = idx;
     document.getElementById('month-' + current).hidden = false;
     navTitle.textContent = MONTHS[current];
@@ -689,25 +705,29 @@ extraToggle.addEventListener('click', () => {{
     extraToggle.textContent = nowHidden ? 'Show extra' : 'Hide extra';
 }});
 
-const printAllBtn = document.getElementById('print-all-btn');
-
-function showOnlyCurrent() {{
-    for (let i = 0; i < MONTHS.length; i++) {{
-        document.getElementById('month-' + i).hidden = (i !== current);
-    }}
-}}
-
 printAllBtn.addEventListener('click', () => {{
-    for (let i = 0; i < MONTHS.length; i++) {{
-        document.getElementById('month-' + i).hidden = false;
+    showingAll = !showingAll;
+    if (showingAll) {{
+        for (let i = 0; i < MONTHS.length; i++) {{
+            document.getElementById('month-' + i).hidden = false;
+        }}
+        document.body.classList.add('print-all');
+        printAllBtn.textContent = 'Back to one month';
+    }} else {{
+        exitShowAll();
+        for (let i = 0; i < MONTHS.length; i++) {{
+            document.getElementById('month-' + i).hidden = (i !== current);
+        }}
     }}
-    document.body.classList.add('print-all');
-    window.print();
 }});
 
 window.addEventListener('afterprint', () => {{
-    document.body.classList.remove('print-all');
-    showOnlyCurrent();
+    if (showingAll) {{
+        exitShowAll();
+        for (let i = 0; i < MONTHS.length; i++) {{
+            document.getElementById('month-' + i).hidden = (i !== current);
+        }}
+    }}
 }});
 """
 
@@ -724,7 +744,7 @@ window.addEventListener('afterprint', () => {{
 <body>
   <div class="toolbar">
     <button class="toggle-btn" id="extra-toggle">Hide extra</button>
-    <button class="toggle-btn" id="print-all-btn">Print all months</button>
+    <button class="toggle-btn" id="print-all-btn">Show all months for printing</button>
   </div>
   <div class="extra-info" id="extra-info">
     <h1>2026–2027 School Year Calendar</h1>
