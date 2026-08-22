@@ -675,7 +675,7 @@ let showingAll = false;
 function exitShowAll() {{
     showingAll = false;
     document.body.classList.remove('print-all');
-    printAllBtn.textContent = 'Show all months for printing';
+    printAllBtn.textContent = 'Prepare to print all months';
 }}
 
 function showMonth(idx) {{
@@ -735,7 +735,7 @@ printAllBtn.addEventListener('click', () => {{
 <body>
   <div class="toolbar">
     <button class="toggle-btn" id="extra-toggle">Hide extra</button>
-    <button class="toggle-btn" id="print-all-btn">Show all months for printing</button>
+    <button class="toggle-btn" id="print-all-btn">Prepare to print all months</button>
   </div>
   <div class="extra-info" id="extra-info">
     <h1>2026–2027 School Year Calendar</h1>
