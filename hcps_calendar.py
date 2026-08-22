@@ -388,6 +388,22 @@ h1 {
 }
 .month-print-title { display: none; }
 
+/*
+   "Show all months" mode (body.print-all): the shared nav-header only ever
+   has one title, so each card gets its own heading instead — on screen too,
+   not just when actually printing, so months are identifiable while
+   scrolling through the show-all view before printing.
+*/
+body.print-all .nav-header { display: none; }
+body.print-all .month-print-title {
+    display: block;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+}
+
 /* Day-of-week header row */
 .dow-row {
     display: grid;
@@ -516,16 +532,6 @@ h1 {
     .day-cell { min-height: 0; overflow: hidden; }
     .event-label { font-size: 0.62rem; line-height: 1.25; }
 
-    /* Print-all-months mode: one month per page, each with its own heading */
-    body.print-all .nav-header { display: none; }
-    body.print-all .month-print-title {
-        display: block;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 0.08in;
-    }
     /*
        No forced break-after here: each month-card is already sized close to
        one full page (see GRID_PRINT_BUDGET_IN), so page-break-inside: avoid
